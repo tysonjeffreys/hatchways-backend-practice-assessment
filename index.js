@@ -18,9 +18,7 @@ app.get('/recipes', (req, res) => {
     const getRecipes = (recipes) => {
         for(let properties in recipes) {
             recipes[properties].forEach(function(entry) {
-                console.log(recipes[properties])
                 recipeNames.push(entry.name)
-                
             })
             let json = JSON.stringify({'recipeNames':recipeNames}, null, 4)
             return json;
@@ -45,15 +43,20 @@ app.get('/recipes', (req, res) => {
 app.get('/recipes/details/:id', (req, res) => {
     const getRecipe = (recipe, recipes) => {
         let json = ''
+        let foundRecipe = []
+        let foundRecipeObj = {}
+        console.log(foundRecipe)
         for(let properties in recipes) {
-            recipes[properties].forEach((entry) => {
-                if(entry.name == recipe){
-                    json = JSON.stringify({'details':entry.ingredients, 'numsteps':entry.instructions.length}, null, 4)
-                    console.log(json)                    
-                }
-            })
+            foundRecipe = recipes[properties].filter(entry => {
+                    return entry.name == recipe;
+                })
+            foundRecipeObj['ingredients'] = foundRecipe[0].ingredients;
+            foundRecipeObj['numSteps'] = foundRecipe[0].ingredients.length;
+            console.log(foundRecipeObj)
+                
         }
-        return json;
+        return JSON.stringify({'details': foundRecipeObj}, null, 4);
+        //return json
     }
 
     fs.readFile('data.json', (err, data) => {
@@ -70,3 +73,7 @@ app.get('/recipes/details/:id', (req, res) => {
         }
     })
 })
+
+
+
+
