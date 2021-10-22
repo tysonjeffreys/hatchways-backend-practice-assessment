@@ -10,6 +10,8 @@ app.listen(port, () => {
 
 app.use(express.json())
 
+//PART 1
+
 app.get('/recipes', (req, res) => {
 
     const recipeNames = [];
@@ -38,29 +40,22 @@ app.get('/recipes', (req, res) => {
     })
 })
 
+//PART 2
+
 app.get('/recipes/details/:id', (req, res) => {
     const getRecipe = (recipe, recipes) => {
         let json = ''
-        //console.log(recipe, recipes)
         for(let properties in recipes) {
-            //console.log(recipes[properties])
             recipes[properties].forEach((entry) => {
                 if(entry.name == recipe){
-                    //console.log(entry.ingredients)
                     json = JSON.stringify({'details':entry.ingredients, 'numsteps':entry.instructions.length}, null, 4)
-                    console.log(json)
-                    //return json;
-                    
+                    console.log(json)                    
                 }
             })
         }
-
-        //return 'hello'
-        //console.log(recipe, recipes)
         return json;
     }
-    
-    
+
     fs.readFile('data.json', (err, data) => {
         if (err) {
             console.log('There was an issue reading the file.', err);
